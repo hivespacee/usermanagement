@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Hide the built-in reveal and clear icons for password fields */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Also ensure extra space on right for your Lucide icon */
+input[type="password"] {
+  padding-right: 2.5rem;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full border-2 border-gray-300 rounded-xl pl-10 pr-10 py-3 text-gray-950 bg-white focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-150 font-mono tracking-widest;
+  }
+}
+

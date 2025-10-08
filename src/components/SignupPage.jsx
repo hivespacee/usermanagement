@@ -1,0 +1,202 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+// import { ToastContext } from '../context/ToastContext';
+import { useToast } from '../context/useToast'
+import { Leaf, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+
+const SignupPage = () => {
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [code, setCode] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    //   const [error, setError] = useState('');
+
+    //   const { signup } = useAuth();
+    const { showToast } = useToast();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        // setError('');
+
+        if (firstname.length < 1 || firstname.length > 20 || lastname.length < 1 || lastname.length > 20) {
+            showToast('Username must be between 1 and 20 characters', 'error');
+            setLoading(false);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showToast('Passwords do not match', 'error');
+            setLoading(false);
+            return;
+        }
+
+        if (password.length < 6) {
+            showToast('Password must be at least 6 characters long', 'error');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            showToast('Signed-up Successfully!', 'success');
+            navigate('/successfull-signup');
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-neutral-800 font-mono tracking-widest">
+            <div className="w-full max-w-4xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
+                <div className="w-full md:w-/2 p-8 relative">
+                    <div className="absolute top-4 right-4 opacity-20">
+                        <Leaf className="w-16 h-16 text-slate transform" />
+                    </div>
+                    <div className="relative z-10">
+                        <h1 className="text-2xl font-bold text-slate mb-7"> Welcome Sapien </h1>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+
+                            <div className="flex-row gap-4 md:flex">
+                                <div  className="">
+                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                        FIRST NAME
+                                    </label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            value={name}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            placeholder="First Name"
+                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div  className="">
+                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                        LAST NAME
+                                    </label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            value={name}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            placeholder="Last Name"
+                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div  className="">
+                                <label className="block text-md font-bold text-gray-900 mb-2">
+                                    EMAIL ID
+                                </label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Email Address"
+                                        className="input-field pl-10 border-2 rounded-r-4xl"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div  className="">
+                                <label className="block text-md font-bold text-gray-900 mb-2">
+                                    Invite ID
+                                </label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
+                                        placeholder="Unique Invite ID"
+                                        className="input-field pl-10 border-2 rounded-r-4xl"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex-row gap-4 md:flex">
+                                <div  className="">
+                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                        PASSWORD
+                                    </label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            placeholder="Secret Shhhh"
+                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-black"
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div  className="">
+                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                        CONFIRM PASSWORD
+                                    </label>
+                                    <div className="relative">
+                                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            placeholder="Again Secret Shhhh"
+                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
+
+                                        >
+                                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full btn-primary py-4 text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-900 hover:scale-105 transition duration-300"
+                            >
+                                {loading ? 'Creating account...' : 'Sign-Up'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default SignupPage;
