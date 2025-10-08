@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { ToastContext } from '../context/ToastContext';
 import { useToast } from '../context/useToast'
-import { Leaf, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Notebook, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 
 const SignupPage = () => {
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    const [code, setCode] = useState('');
+    // const [code, setCode] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [authMethod, setAuthMethod] = useState('');
+
     //   const [error, setError] = useState('');
 
     //   const { signup } = useAuth();
@@ -45,7 +47,12 @@ const SignupPage = () => {
 
         try {
             showToast('Signed-up Successfully!', 'success');
-            navigate('/successfull-signup');
+            if (authMethod === 'otp') {
+                navigate('/verify-otp');
+              } 
+            else if (authMethod === 'totp') {
+                navigate('/successfull-signup');
+              }
         }
         finally {
             setLoading(false);
@@ -55,24 +62,25 @@ const SignupPage = () => {
     return (
         <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-neutral-800 font-mono tracking-widest">
             <div className="w-full max-w-4xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
-                <div className="w-full md:w-/2 p-8 relative">
+                <div className="w-full md:w-4/5 p-8 relative">
                     <div className="absolute top-4 right-4 opacity-20">
-                        <Leaf className="w-16 h-16 text-slate transform" />
+                        <Notebook className="w-18 h-12 mt-2 text-slate transform" />
                     </div>
                     <div className="relative z-10">
                         <h1 className="text-2xl font-bold text-slate mb-7"> Welcome Sapien </h1>
                         <form onSubmit={handleSubmit} className="space-y-6">
 
-                            <div className="flex-row gap-4 md:flex">
-                                <div  className="">
+                            {/* UserName */}
+                            <div className="flex-row w-full gap-4 md:flex">
+                                <div className="relative w-full">
                                     <label className="block text-md font-bold text-gray-900 mb-2">
                                         FIRST NAME
                                     </label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <div className="">
+                                        <User className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
                                             type="text"
-                                            value={name}
+                                            value={firstname}
                                             onChange={(e) => setFirstName(e.target.value)}
                                             placeholder="First Name"
                                             className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
@@ -81,15 +89,15 @@ const SignupPage = () => {
                                     </div>
                                 </div>
 
-                                <div  className="">
+                                <div className="relative w-full">
                                     <label className="block text-md font-bold text-gray-900 mb-2">
                                         LAST NAME
                                     </label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <div className="">
+                                        <User className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
                                             type="text"
-                                            value={name}
+                                            value={lastname}
                                             onChange={(e) => setLastName(e.target.value)}
                                             placeholder="Last Name"
                                             className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
@@ -98,8 +106,8 @@ const SignupPage = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            <div  className="">
+                            {/* Email */}
+                            <div className="">
                                 <label className="block text-md font-bold text-gray-900 mb-2">
                                     EMAIL ID
                                 </label>
@@ -115,8 +123,8 @@ const SignupPage = () => {
                                     />
                                 </div>
                             </div>
-
-                            <div  className="">
+                            {/* Invite ID */}
+                            {/* <div className="">
                                 <label className="block text-md font-bold text-gray-900 mb-2">
                                     Invite ID
                                 </label>
@@ -131,15 +139,48 @@ const SignupPage = () => {
                                         required
                                     />
                                 </div>
+                            </div> */}
+
+                            {/* Verification Method */}
+                            <div>
+                                <label className="block text-md font-bold text-gray-900 mb-2">
+                                    Verification Method
+                                </label>
+                                <div className="flex items-center gap-6">
+                                    <label className="flex items-center space-x-2">
+                                        <input
+                                            type="radio"
+                                            name="authMethod"
+                                            value="otp"
+                                            checked={authMethod === 'otp'}
+                                            onChange={(e) => setAuthMethod(e.target.value)}
+                                            className="accent-black w-4 h-4 cursor-pointer"
+                                        />
+                                        <span className="text-gray-800">OTP</span>
+                                    </label>
+
+                                    <label className="flex items-center space-x-2">
+                                        <input
+                                            type="radio"
+                                            name="authMethod"
+                                            value="totp"
+                                            checked={authMethod === 'totp'}
+                                            onChange={(e) => setAuthMethod(e.target.value)}
+                                            className="accent-black w-4 h-4 cursor-pointer"
+                                        />
+                                        <span className="text-gray-800">TOTP</span>
+                                    </label>
+                                </div>
                             </div>
 
+                            {/* Password */}
                             <div className="flex-row gap-4 md:flex">
-                                <div  className="">
+                                <div className="relative w-full">
                                     <label className="block text-md font-bold text-gray-900 mb-2">
                                         PASSWORD
                                     </label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <div className="">
+                                        <Lock className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             value={password}
@@ -151,19 +192,19 @@ const SignupPage = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-black"
+                                            className="absolute right-3.5 top-14.5 transform -translate-y-1/2 text-gray-400 hover:text-black"
                                         >
                                             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
                                     </div>
                                 </div>
 
-                                <div  className="">
+                                <div className="relative w-full">
                                     <label className="block text-md font-bold text-gray-900 mb-2">
                                         CONFIRM PASSWORD
                                     </label>
-                                    <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <div className="">
+                                        <Lock className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             value={confirmPassword}
@@ -175,7 +216,7 @@ const SignupPage = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
+                                            className="absolute right-3.5 top-14.5 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
 
                                         >
                                             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
