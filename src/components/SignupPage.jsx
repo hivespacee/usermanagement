@@ -2,21 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { ToastContext } from '../context/ToastContext';
 import { useToast } from '../context/useToast'
-import { Notebook, User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Notebook, User, Mail, Lock, Eye, EyeOff, X  } from 'lucide-react';
 
 const SignupPage = () => {
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState('');
-    // const [code, setCode] = useState('');
     const [password, setPassword] = useState('');
+    const [inviteId, setInviteId] = useState('');
+    const [showInvitePopup, setShowInvitePopup] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [authMethod, setAuthMethod] = useState('');
-
-    //   const [error, setError] = useState('');
 
     //   const { signup } = useAuth();
     const { showToast } = useToast();
@@ -25,7 +24,6 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // setError('');
 
         if (firstname.length < 1 || firstname.length > 20 || lastname.length < 1 || lastname.length > 20) {
             showToast('Username must be between 1 and 20 characters', 'error');
@@ -49,10 +47,10 @@ const SignupPage = () => {
             showToast('Signed-up Successfully!', 'success');
             if (authMethod === 'otp') {
                 navigate('/verify-otp');
-              } 
+            }
             else if (authMethod === 'totp') {
                 navigate('/successfull-signup');
-              }
+            }
         }
         finally {
             setLoading(false);
@@ -123,23 +121,73 @@ const SignupPage = () => {
                                     />
                                 </div>
                             </div>
-                            {/* Invite ID */}
-                            {/* <div className="">
-                                <label className="block text-md font-bold text-gray-900 mb-2">
-                                    Invite ID
-                                </label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        value={code}
-                                        onChange={(e) => setCode(e.target.value)}
-                                        placeholder="Unique Invite ID"
-                                        className="input-field pl-10 border-2 rounded-r-4xl"
-                                        required
-                                    />
-                                </div>
-                            </div> */}
+
+                            {/* Unique ID Popup Section */}
+                            <div>
+                                {/* <label className="block text-md font-bold text-gray-900 mb-2">
+                                    UNIQUE ID
+                                </label> */}
+
+                                {/* Trigger Link */}
+                                <p
+                                    onClick={() => setShowInvitePopup(true)}
+                                    className="text-sm text-gray-900 hover:underline cursor-pointer"
+                                >
+                                    See Unique ID?
+                                </p>
+
+                                {/* Popup Modal */}
+                                {showInvitePopup && (
+                                    <div className="fixed inset-0 flex items-center justify-center bg-stone-950/80 z-50">
+                                        <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+                                            <h2 className="text-lg font-bold text-gray-800 mb-4">Unique ID</h2>
+                                            <button
+                            className="absolute top-3 right-3 text-gray-500 hover:text-black"
+                            onClick={() => setShowInvitePopup(false)}
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                                            <div className="relative">
+                                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    value={inviteId}
+                                                    onChange={(e) => setInviteId(e.target.value)}
+                                                    placeholder="Enter your Unique ID"
+                                                    className="input-field pl-10 border-2 rounded-r-4xl w-full"
+                                                    required
+                                                />
+                                            </div>
+
+                                            {/* <div className="flex justify-end gap-3 mt-5">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowInvitePopup(false)}
+                                                    className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!inviteId.trim()) {
+                                                            showToast('Please enter your Unique ID', 'error');
+                                                            return;
+                                                        }
+                                                        setShowInvitePopup(false);
+                                                        showToast('Unique ID added', 'success');
+                                                    }}
+                                                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition"
+                                                >
+                                                    Save
+                                                </button>
+                                            </div> */}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+
 
                             {/* Verification Method */}
                             <div>
