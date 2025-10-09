@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/useToast'
 import { Notebook, User, Mail, Lock, Eye, EyeOff, X } from 'lucide-react';
 import ShimmerLoader from '../effects/ShimmerLoader';
+import OtpPopup from "../effects/OtpPopup";
 
 const SignupPage = () => {
+
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ const SignupPage = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [authMethod, setAuthMethod] = useState('');
+    const [showOtpPopup, setShowOtpPopup] = useState(false);
 
     //   const { signup } = useAuth();
     const { showToast } = useToast();
@@ -49,12 +52,11 @@ const SignupPage = () => {
         }
 
         try {
-            showToast('Signed-up Successfully!', 'success');
             if (authMethod === 'otp') {
-                navigate('/verify-otp');
+                setShowOtpPopup(true);
             }
             else if (authMethod === 'totp') {
-                navigate('/successfull-signup');
+                navigate('/mfa-setup');
             }
         }
         finally {
@@ -289,6 +291,17 @@ const SignupPage = () => {
                     </div>
                 </div>
             </div>
+            {showOtpPopup && (
+                <OtpPopup
+                    email={email}
+                    onClose={() => setShowOtpPopup(false)}
+                    onVerify={(otp) => {
+                        showToast("OTP verified successfully!", "success");
+                        setShowOtpPopup(false);
+                        navigate("/demopage");
+                    }}
+                />
+            )}
         </div>
     );
 };

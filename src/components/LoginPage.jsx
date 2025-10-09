@@ -3,21 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/useToast'
 import { Notebook, Mail, Lock, Eye, EyeOff, KeyRound, X } from 'lucide-react';
 import ShimmerLoader from '../effects/ShimmerLoader';
+import OtpPopup from "../effects/OtpPopup";
+
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [otp, setOtp] = useState('');
+    // const [otp, setOtp] = useState('');
     const [showOtpPopup, setShowOtpPopup] = useState(false);
     // const [token, setToken] = useState('');
 
     const { showToast } = useToast();
     const navigate = useNavigate();
 
-    if(loading){
-        return <ShimmerLoader/>;
+    if (loading) {
+        return <ShimmerLoader />;
     }
 
     const checkMfaStatus = (email) => {
@@ -25,21 +27,21 @@ const LoginPage = () => {
         return enabledEmails.includes(email.toLowerCase());
     };
 
-    const handleOtpSubmit = (e) => {
-        e.preventDefault();
-        if (otp.length !== 6) {
-            showToast('Please enter a valid 6-digit OTP', 'error');
-            return;
-        }
-        if (!/^\d+$/.test(otp)) {
-            showToast('OTP must be numeric', 'error');
-            return;
-        }
+    // const handleOtpSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (otp.length !== 6) {
+    //         showToast('Please enter a valid 6-digit OTP', 'error');
+    //         return;
+    //     }
+    //     if (!/^\d+$/.test(otp)) {
+    //         showToast('OTP must be numeric', 'error');
+    //         return;
+    //     }
 
-        showToast('Login successful with MFA!', 'success');
-        setShowOtpPopup(false);
-        navigate('/demopage');
-    };
+    //     showToast('Login successful with MFA!', 'success');
+    //     setShowOtpPopup(false);
+    //     navigate('/demopage');
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -126,7 +128,7 @@ const LoginPage = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-primary py-4 text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-900 hover:scale-105 transition duration-300"
+                                className="w-full btn-primary py-4 text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-950 hover:scale-105 transition duration-300"
                             >
                                 {loading ? 'Verifying...' : 'Send OTP'}
                             </button>
@@ -136,38 +138,15 @@ const LoginPage = () => {
             </div>
             {/* POP-UP */}
             {showOtpPopup && (
-                <div className="fixed inset-0 bg-stone-950/80 flex justify-center items-center z-50">
-                    <div className="bg-white rounded-2xl p-8 shadow-lg relative w-[90%] max-w-md">
-                        <button
-                            className="absolute top-3 right-3 text-gray-500 hover:text-black"
-                            onClick={() => setShowOtpPopup(false)}
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            <KeyRound className="w-5 h-5" /> Enter OTP
-                        </h2>
-                        <p className="text-gray-600 mb-4 text-sm">
-                            An OTP has been sent to your email <strong>{email}</strong>.
-                        </p>
-                        <form onSubmit={handleOtpSubmit}>
-                            <input
-                                type="text"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                placeholder="Enter 6-digit OTP"
-                                maxLength="6"
-                                className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-center font-mono text-lg tracking-widest mb-4 focus:outline-none focus:ring-2 focus:ring-black"
-                            />
-                            <button
-                                type="submit"
-                                className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-900 transition"
-                            >
-                                Verify OTP
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <OtpPopup
+                    email={email}
+                    onClose={() => setShowOtpPopup(false)}
+                    onVerify={(otp) => {
+                        showToast("OTP verified successfully!", "success");
+                        setShowOtpPopup(false);
+                        navigate("/demopage");
+                    }}
+                />
             )}
         </div>
     );
