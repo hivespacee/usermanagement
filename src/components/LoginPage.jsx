@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/useToast'
 import { Notebook, Mail, Lock, Eye, EyeOff, KeyRound, X } from 'lucide-react';
+import ShimmerLoader from '../effects/ShimmerLoader';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -14,6 +15,10 @@ const LoginPage = () => {
 
     const { showToast } = useToast();
     const navigate = useNavigate();
+
+    if(loading){
+        return <ShimmerLoader/>;
+    }
 
     const checkMfaStatus = (email) => {
         const enabledEmails = ['user1@gmail.com', 'amaan@gmail.com'];

@@ -16,12 +16,6 @@ function App() {
           <Route path="/demopage" element={ <DemoPage/> } />
           <Route path="/setup-mfa" element={ <MFA_Setup/> } />
         </Routes>
-
-        <div className="bg-black">
-          <p>
-
-          </p>
-        </div>
     </ToastProvider>
   )
 }

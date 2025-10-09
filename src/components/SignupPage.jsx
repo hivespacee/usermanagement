@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { ToastContext } from '../context/ToastContext';
 import { useToast } from '../context/useToast'
-import { Notebook, User, Mail, Lock, Eye, EyeOff, X  } from 'lucide-react';
+import { Notebook, User, Mail, Lock, Eye, EyeOff, X } from 'lucide-react';
+import ShimmerLoader from '../effects/ShimmerLoader';
 
 const SignupPage = () => {
     const [firstname, setFirstName] = useState('');
@@ -20,6 +21,10 @@ const SignupPage = () => {
     //   const { signup } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
+
+    if (loading) {
+        return <ShimmerLoader />
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -142,11 +147,11 @@ const SignupPage = () => {
                                         <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
                                             <h2 className="text-lg font-bold text-gray-800 mb-4">Unique ID</h2>
                                             <button
-                            className="absolute top-3 right-3 text-gray-500 hover:text-black"
-                            onClick={() => setShowInvitePopup(false)}
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
+                                                className="absolute top-3 right-3 text-gray-500 hover:text-black"
+                                                onClick={() => setShowInvitePopup(false)}
+                                            >
+                                                <X className="w-5 h-5" />
+                                            </button>
                                             <div className="relative">
                                                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                                                 <input
