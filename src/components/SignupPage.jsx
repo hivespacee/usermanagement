@@ -272,7 +272,6 @@ const SignupPage = () => {
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                             className="absolute right-3.5 top-14.5 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
-
                                         >
                                             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                         </button>
@@ -298,7 +297,7 @@ const SignupPage = () => {
                     onVerify={(otp) => {
                         showToast("OTP verified successfully!", "success");
                         setShowOtpPopup(false);
-                        navigate("/demopage");
+                        navigate("/successfull-signup");
                     }}
                 />
             )}
