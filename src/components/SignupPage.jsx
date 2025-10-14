@@ -53,10 +53,10 @@ const SignupPage = () => {
 
         try {
             if (authMethod === 'otp') {
-                setShowOtpPopup(true);
+                setShowOtpPopup(true); 
             }
             else if (authMethod === 'totp') {
-                navigate('/mfa-setup');
+                navigate('/setup-mfa');
             }
         }
         finally {

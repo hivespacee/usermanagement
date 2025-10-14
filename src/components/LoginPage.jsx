@@ -54,14 +54,13 @@ const LoginPage = () => {
         }
 
         try {
-            // const isMfaEnabled = checkMfaStatus(email);
+            const isMfaEnabled = checkMfaStatus(email);
 
-            // if (isMfaEnabled) {
-            //     setShowOtpPopup(true);
-            // } else {
-            //     showToast('Please enable MFA', 'info');
-            //     navigate('/setup-mfa');
-            // }
+            if (isMfaEnabled) {
+                // popup has statement like "check you authenticator app for otp"
+            } else {
+                // popup has statement like "check you email for otp"
+            }
             setShowOtpPopup(true)
         }
         finally {
@@ -145,7 +144,7 @@ const LoginPage = () => {
                     onVerify={(otp) => {
                         showToast("OTP verified successfully!", "success");
                         setShowOtpPopup(false);
-                        navigate("/successfull-signup");
+                        navigate("/dashboard/super-admin");
                     }}
                 />
             )}
