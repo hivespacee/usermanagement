@@ -17,7 +17,7 @@ const columns = [
   { key: 'status', header: 'Status' },
 ];
 
-const SiteAdminDashboard = () => {
+const SiteAdminDashboard = () => { 
   const [user] = useState({ name: 'Site Admin', role: 'Site Admin' });
   const [lists, setLists] = useState({ operator: [], clientAdmin: [] });
   const [inviteOpenFor, setInviteOpenFor] = useState(null);

@@ -8,7 +8,7 @@ const NoInternet = () => {
       <p className="text-gray-400 font-extrabold mb-8 text-center">
         Oops, out of network! Please check your connection and try again.
       </p>
-        <img src={NoInternetImg} alt="No Internet" className="w-20 h-90 mb-8 rounded-4xl" />    </div>
+        <img src={NoInternetImg} alt="No Internet" className="w-20 h-90 mb-8 rounded-4xl " />    </div>
   );
 };
 
