@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import DashboardLayout from '../Layout/DashboardLayout';
 import Card from '../UI/Card';
 import Modal from '../UI/Modal';
 import LogoutEffect from '../../effects/LogoutEffect'
 import ScrollableTable from '../UI/ScrollableTable';
+import ShimmerLoader from '../../effects/ShimmerLoader';
 
 const columns = [
   { key: 'sno', header: 'S.No' },
@@ -12,15 +14,28 @@ const columns = [
 ];
 
 const ClientAdminDashboard = () => {
-  const [user] = useState({ name: 'Client Admin', role: 'Client Admin' });
+  const { user: authUser, logout } = useAuth();
+  const [user] = useState({ name: authUser?.name || 'Client Admin', role: 'Client Admin' });
   const [clientUsers, setClientUsers] = useState([]);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [form, setForm] = useState({ email: '' });
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const onLogout = () => {
     setLoading(true);
+    setTimeout(() => {
+      logout();
+    }, 1500);
   };
 
   const sendInvite = () => {
@@ -33,7 +48,11 @@ const ClientAdminDashboard = () => {
     setInviteOpen(false); 
   };
 
-   if (loading) {
+  if (initialLoading) {
+    return <ShimmerLoader />;
+  }
+
+  if (loading) {
     return <LogoutEffect duration={1500} redirectTo="/login" />;
   }
 
@@ -45,7 +64,7 @@ const ClientAdminDashboard = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setInviteOpen(true)}
-              className="px-4 py-2 rounded-xl bg-neutral-800 bg-neutral-800 border-amber-100 text-gray-200 hover:bg-neutral-700"
+              className="px-4 py-2 rounded-xl bg-neutral-800 border-amber-100 text-gray-200 hover:bg-neutral-700"
             >
               Invite
             </button>

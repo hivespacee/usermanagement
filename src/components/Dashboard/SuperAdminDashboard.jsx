@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import DashboardLayout from '../Layout/DashboardLayout';
 import Card from '../UI/Card';
 import Modal from '../UI/Modal';
 import ScrollableTable from '../UI/ScrollableTable';
 import LogoutEffect from '../../effects/LogoutEffect'
+import ShimmerLoader from '../../effects/ShimmerLoader';
 
 const roleConfigs = [
   { key: 'siteAdmin', label: 'Site Admins' },
@@ -26,16 +28,30 @@ const columns = [
 ];
 
 const SuperAdminDashboard = () => {
-  const [user] = useState({ name: 'Super Admin', role: 'Super Admin' });
+  const { user: authUser, logout } = useAuth();
+  const [user] = useState({ name: authUser?.name || 'Super Admin', role: 'Super Admin' });
   const [lists, setLists] = useState(initialLists);
   const [inviteOpenFor, setInviteOpenFor] = useState(null);
   const [viewListFor, setViewListFor] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const [form, setForm] = useState({ email: '', organization: '' });
 
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   const onLogout = () => {
     setLoading(true);
+    setTimeout(() => {
+      logout();
+    }, 1500);
   };
 
   const sendInvite = (roleKey) => {
@@ -100,6 +116,10 @@ const SuperAdminDashboard = () => {
   };
 
   const grid = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 min-w-0';
+
+  if (initialLoading) {
+    return <ShimmerLoader />;
+  }
 
   if (loading) {
     return <LogoutEffect duration={1500} redirectTo="/login" />;

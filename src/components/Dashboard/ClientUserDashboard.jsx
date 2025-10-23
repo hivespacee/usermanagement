@@ -1,25 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import DashboardLayout from '../Layout/DashboardLayout';
 import Card from '../UI/Card';
 import LogoutEffect from '../../effects/LogoutEffect'
+import ShimmerLoader from '../../effects/ShimmerLoader';
 
 const ClientUserDashboard = () => {
+  const { user: authUser, logout } = useAuth();
   const [user] = useState({
-    name: 'Client User',
+    name: authUser?.name || 'Client User',
     role: 'Client User',
-    email: 'user@client.com',
+    email: authUser?.email || 'user@client.com',
     organization: 'ExampleOrg',
     assignedAdmin: 'alice.admin@client.com',
   });
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const onLogout = () => {
     setLoading(true);
+    setTimeout(() => {
+      logout();
+    }, 1500);
   };
+
+  if (initialLoading) {
+    return <ShimmerLoader />;
+  }
 
   if (loading) {
     return <LogoutEffect duration={1500} redirectTo="/login" />;
-
   }
   return (
     <DashboardLayout user={user} onLogout={onLogout}>

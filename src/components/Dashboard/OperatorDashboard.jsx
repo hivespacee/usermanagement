@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import DashboardLayout from '../Layout/DashboardLayout';
 import ScrollableTable from '../UI/ScrollableTable';
 import LogoutEffect from '../../effects/LogoutEffect'
 import Card from '../UI/Card';
 import Modal from '../UI/Modal';
+import ShimmerLoader from '../../effects/ShimmerLoader';
 
 const roleConfigs = [
   { key: 'clientAdmin', label: 'Client Admins', accent: 'emerald' },
@@ -17,13 +19,24 @@ const columns = [
 ];
 
 const OperatorDashboard = () => {
+  const { user: authUser, logout } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [user] = useState({ name: 'Operator', role: 'Operator' });
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [user] = useState({ name: authUser?.name || 'Operator', role: 'Operator' });
   const [lists, setLists] = useState({ clientAdmin: [] });
 
   const [inviteOpenFor, setInviteOpenFor] = useState(null);
   const [viewListFor, setViewListFor] = useState(null);
   const [form, setForm] = useState({ email: '', organization: '' });
+
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Read-only sample list of client admins
   // const [clientAdmins] = useState([
@@ -34,6 +47,9 @@ const OperatorDashboard = () => {
 
   const onLogout = () => {
     setLoading(true);
+    setTimeout(() => {
+      logout();
+    }, 1500);
   };
 
   const sendInvite = (roleKey) => {
@@ -85,6 +101,10 @@ const OperatorDashboard = () => {
 
 
 
+
+  if (initialLoading) {
+    return <ShimmerLoader />;
+  }
 
   if (loading) {
     return <LogoutEffect duration={1500} redirectTo="/login" />;

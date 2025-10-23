@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../context/useAuth';
 import DashboardLayout from '../Layout/DashboardLayout';
 import Card from '../UI/Card';
 import Modal from '../UI/Modal';
 import ScrollableTable from '../UI/ScrollableTable';
 import LogoutEffect from '../../effects/LogoutEffect'
+import ShimmerLoader from '../../effects/ShimmerLoader';
 
 
 const roleConfigs = [
@@ -18,15 +20,29 @@ const columns = [
 ];
 
 const SiteAdminDashboard = () => { 
-  const [user] = useState({ name: 'Site Admin', role: 'Site Admin' });
+  const { user: authUser, logout } = useAuth();
+  const [user] = useState({ name: authUser?.name || 'Site Admin', role: 'Site Admin' });
   const [lists, setLists] = useState({ operator: [], clientAdmin: [] });
   const [inviteOpenFor, setInviteOpenFor] = useState(null);
   const [viewListFor, setViewListFor] = useState(null);
   const [form, setForm] = useState({ email: '', organization: '' });
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial data loading
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const onLogout = () =>{
     setLoading(true);
+    setTimeout(() => {
+      logout();
+    }, 1500);
   };
 
   const sendInvite = (roleKey) => {
@@ -74,6 +90,10 @@ const SiteAdminDashboard = () => {
       </div>
     </div>
   ); 
+
+  if (initialLoading) {
+    return <ShimmerLoader />;
+  }
 
   if (loading) {
     return <LogoutEffect duration={1500} redirectTo="/login" />;

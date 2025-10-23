@@ -65,47 +65,47 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-neutral-800 font-mono tracking-widest">
-            <div className="w-full max-w-4xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
-                <div className="w-full md:w-4/5 p-8 relative">
-                    <div className="absolute top-4 right-4 opacity-20">
-                        <Notebook className="w-18 h-12 mt-2 text-slate transform" />
+        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 bg-neutral-800 font-mono tracking-widest">
+            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-4xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
+                <div className="w-full p-6 sm:p-8 relative">
+                    <div className="absolute top-2 sm:top-4 right-2 sm:right-4 opacity-20">
+                        <Notebook className="w-12 sm:w-16 md:w-18 h-8 sm:h-10 md:h-12 mt-2 text-slate transform" />
                     </div>
                     <div className="relative z-10">
-                        <h1 className="text-2xl font-bold text-slate mb-7"> Welcome Sapien </h1>
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <h1 className="text-xl sm:text-2xl font-bold text-slate mb-6 sm:mb-7"> Welcome Sapien </h1>
+                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
 
                             {/* UserName */}
-                            <div className="flex-row w-full gap-4 md:flex">
+                            <div className="flex flex-col sm:flex-row w-full gap-4">
                                 <div className="relative w-full">
-                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                    <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                         FIRST NAME
                                     </label>
                                     <div className="">
-                                        <User className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <User className="absolute left-3 top-12 sm:top-14 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                         <input
                                             type="text"
                                             value={firstname}
                                             onChange={(e) => setFirstName(e.target.value)}
                                             placeholder="First Name"
-                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            className="input-field pl-10 pr-4 py-3 sm:py-4 border-2 rounded-r-4xl w-full font-mono tracking-widest text-sm sm:text-base"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="relative w-full">
-                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                    <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                         LAST NAME
                                     </label>
                                     <div className="">
-                                        <User className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <User className="absolute left-3 top-12 sm:top-14 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                         <input
                                             type="text"
                                             value={lastname}
                                             onChange={(e) => setLastName(e.target.value)}
                                             placeholder="Last Name"
-                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            className="input-field pl-10 pr-4 py-3 sm:py-4 border-2 rounded-r-4xl w-full font-mono tracking-widest text-sm sm:text-base"
                                             required
                                         />
                                     </div>
@@ -113,17 +113,17 @@ const SignupPage = () => {
                             </div>
                             {/* Email */}
                             <div className="">
-                                <label className="block text-md font-bold text-gray-900 mb-2">
+                                <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                     EMAIL ID
                                 </label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="Email Address"
-                                        className="input-field pl-10 border-2 rounded-r-4xl"
+                                        className="input-field pl-10 pr-4 py-3 sm:py-4 border-2 rounded-r-4xl w-full text-sm sm:text-base"
                                         required
                                     />
                                 </div>
@@ -131,64 +131,36 @@ const SignupPage = () => {
 
                             {/* Unique ID Popup Section */}
                             <div>
-                                {/* <label className="block text-md font-bold text-gray-900 mb-2">
-                                    UNIQUE ID
-                                </label> */}
-
                                 {/* Trigger Link */}
                                 <p
                                     onClick={() => setShowInvitePopup(true)}
-                                    className="text-sm text-gray-900 hover:underline cursor-pointer"
+                                    className="text-xs sm:text-sm text-gray-900 hover:underline cursor-pointer"
                                 >
                                     See Unique ID?
                                 </p>
 
                                 {/* Popup Modal */}
                                 {showInvitePopup && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-stone-950/80 z-50">
-                                        <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-                                            <h2 className="text-lg font-bold text-gray-800 mb-4">Unique ID</h2>
+                                    <div className="fixed inset-0 flex items-center justify-center bg-stone-950/80 z-50 p-4">
+                                        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md relative">
+                                            <h2 className="text-base sm:text-lg font-bold text-gray-800 mb-4">Unique ID</h2>
                                             <button
-                                                className="absolute top-3 right-3 text-gray-500 hover:text-black"
+                                                className="absolute top-2 sm:top-3 right-2 sm:right-3 text-gray-500 hover:text-black"
                                                 onClick={() => setShowInvitePopup(false)}
                                             >
-                                                <X className="w-5 h-5" />
+                                                <X className="w-4 sm:w-5 h-4 sm:h-5" />
                                             </button>
                                             <div className="relative">
-                                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                                 <input
                                                     type="text"
                                                     value={inviteId}
                                                     onChange={(e) => setInviteId(e.target.value)}
                                                     placeholder="Enter your Unique ID"
-                                                    className="input-field pl-10 border-2 rounded-r-4xl w-full"
+                                                    className="input-field pl-10 pr-4 py-3 sm:py-4 border-2 rounded-r-4xl w-full text-sm sm:text-base"
                                                     required
                                                 />
                                             </div>
-
-                                            {/* <div className="flex justify-end gap-3 mt-5">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowInvitePopup(false)}
-                                                    className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        if (!inviteId.trim()) {
-                                                            showToast('Please enter your Unique ID', 'error');
-                                                            return;
-                                                        }
-                                                        setShowInvitePopup(false);
-                                                        showToast('Unique ID added', 'success');
-                                                    }}
-                                                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition"
-                                                >
-                                                    Save
-                                                </button>
-                                            </div> */}
                                         </div>
                                     </div>
                                 )}
@@ -198,10 +170,10 @@ const SignupPage = () => {
 
                             {/* Verification Method */}
                             <div>
-                                <label className="block text-md font-bold text-gray-900 mb-2">
+                                <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                     Verification Method
                                 </label>
-                                <div className="flex items-center gap-6">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                                     <label className="flex items-center space-x-2">
                                         <input
                                             type="radio"
@@ -211,7 +183,7 @@ const SignupPage = () => {
                                             onChange={(e) => setAuthMethod(e.target.value)}
                                             className="accent-black w-4 h-4 cursor-pointer"
                                         />
-                                        <span className="text-gray-800">OTP</span>
+                                        <span className="text-sm sm:text-base text-gray-800">OTP</span>
                                     </label>
 
                                     <label className="flex items-center space-x-2">
@@ -223,57 +195,57 @@ const SignupPage = () => {
                                             onChange={(e) => setAuthMethod(e.target.value)}
                                             className="accent-black w-4 h-4 cursor-pointer"
                                         />
-                                        <span className="text-gray-800">TOTP</span>
+                                        <span className="text-sm sm:text-base text-gray-800">TOTP</span>
                                     </label>
                                 </div>
                             </div>
 
                             {/* Password */}
-                            <div className="flex-row gap-4 md:flex">
+                            <div className="flex flex-col sm:flex-row gap-4">
                                 <div className="relative w-full">
-                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                    <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                         PASSWORD
                                     </label>
                                     <div className="">
-                                        <Lock className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <Lock className="absolute left-3 top-12 sm:top-14 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             placeholder="Secret Shhhh"
-                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            className="input-field pl-10 pr-12 py-3 sm:py-4 border-2 rounded-r-4xl w-full font-mono tracking-widest text-sm sm:text-base"
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-3.5 top-14.5 transform -translate-y-1/2 text-gray-400 hover:text-black"
+                                            className="absolute right-3 sm:right-3.5 top-12 sm:top-14.5 transform -translate-y-1/2 text-gray-400 hover:text-black"
                                         >
-                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                            {showPassword ? <EyeOff className="w-4 sm:w-5 h-4 sm:h-5" /> : <Eye className="w-4 sm:w-5 h-4 sm:h-5" />}
                                         </button>
                                     </div>
                                 </div>
 
                                 <div className="relative w-full">
-                                    <label className="block text-md font-bold text-gray-900 mb-2">
+                                    <label className="block text-sm sm:text-md font-bold text-gray-900 mb-2">
                                         CONFIRM PASSWORD
                                     </label>
                                     <div className="">
-                                        <Lock className="absolute left-3 top-14 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <Lock className="absolute left-3 top-12 sm:top-14 transform -translate-y-1/2 w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
                                             placeholder="Again Secret Shhhh"
-                                            className="input-field pl-10 border-2 rounded-r-4xl w-full font-mono tracking-widest"
+                                            className="input-field pl-10 pr-12 py-3 sm:py-4 border-2 rounded-r-4xl w-full font-mono tracking-widest text-sm sm:text-base"
                                             required
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            className="absolute right-3.5 top-14.5 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
+                                            className="absolute right-3 sm:right-3.5 top-12 sm:top-14.5 -translate-y-1/2 text-gray-400 hover:text-black transition-all duration-200 pointer-events-auto"
                                         >
-                                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                            {showConfirmPassword ? <EyeOff className="w-4 sm:w-5 h-4 sm:h-5" /> : <Eye className="w-4 sm:w-5 h-4 sm:h-5" />}
                                         </button>
                                     </div>
                                 </div>
@@ -282,7 +254,7 @@ const SignupPage = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-primary py-4 text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-900 hover:scale-105 transition duration-300"
+                                className="w-full btn-primary py-3 sm:py-4 text-base sm:text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-900 hover:scale-105 transition duration-300"
                             >
                                 {loading ? 'Creating account...' : 'Sign-Up'}
                             </button>
@@ -294,10 +266,10 @@ const SignupPage = () => {
                 <OtpPopup
                     email={email}
                     onClose={() => setShowOtpPopup(false)}
-                    onVerify={(otp) => {
+                    onVerify={() => {
                         showToast("OTP verified successfully!", "success");
                         setShowOtpPopup(false);
-                        navigate("/successfull-signup");
+                        navigate("/login");
                     }}
                 />
             )}
