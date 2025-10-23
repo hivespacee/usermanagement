@@ -2,12 +2,12 @@ import { useState } from "react";
 import { X, KeyRound } from "lucide-react";
 import { useToast } from "../context/useToast";
 
-const OtpPopup = ({ email, onClose, onVerify }) => {
-    const mockotp = "999999";
+const OtpPopup = ({ email, onClose, onVerify, isMfaEnabled, buttonLoading }) => {
   const [otp, setOtp] = useState("");
   const { showToast } = useToast();
 
-  const handleSubmit = (e) => {
+  const handleOTPSubmit = (e) => {
+
     e.preventDefault();
 
     if (otp.length !== 6) {
@@ -16,11 +16,6 @@ const OtpPopup = ({ email, onClose, onVerify }) => {
     }
     if(!/^\d+$/.test(otp)){
         showToast("OTP must be numeric", "error");
-        return;
-    }
-
-    if(otp !== mockotp) {
-        showToast("Invalid OTP. Please try again.", "error");
         return;
     }
     onVerify(otp);
@@ -39,10 +34,10 @@ const OtpPopup = ({ email, onClose, onVerify }) => {
           <KeyRound className="w-5 h-5" /> Enter OTP
         </h2>
         <p className="text-gray-600 mb-4 text-sm">
-          An OTP has been sent to your email <strong>{email}</strong>.
+          {isMfaEnabled ? "Enter the code from you authenticator app." : `Enter the OTP that has been sent to ${email}.`}
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleOTPSubmit}>
           <input
             type="text"
             value={otp}
@@ -51,11 +46,11 @@ const OtpPopup = ({ email, onClose, onVerify }) => {
             maxLength="6"
             className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-center font-mono text-lg tracking-widest mb-4 focus:outline-none focus:ring-2 focus:ring-black"
           />
-          <button
+          <button  
             type="submit"
             className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-900 transition"
           >
-            Verify OTP
+            {buttonLoading ? 'Verifying...' : 'Verify OTP'}
           </button>
         </form>
       </div>

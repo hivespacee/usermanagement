@@ -38,7 +38,7 @@ const Navbar = ({ user, onLogout }) => {
       </button>
 
       <div className="text-gray-200 text-lg font-bold tracking-widest">
-        Kuch Nahi
+        Kuch Nahi  {user.name}
       </div>
 
       <div className="relative" ref={dropdownRef}>

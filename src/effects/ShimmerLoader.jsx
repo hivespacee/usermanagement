@@ -4,8 +4,7 @@ import { ShimmerPostList } from "react-shimmer-effects";
 const ShimmerLoader = () => {
   return (
     <div className="p-6">
-      {/* Example shimmer for cards or list items */}
-      <ShimmerPostList postStyle="STYLE_ONE" col={2} row={1} gap={30} />
+      <ShimmerPostList postStyle="STYLE_SEVEN" col={2} row={2} gap={20} />
     </div>
   );
 };

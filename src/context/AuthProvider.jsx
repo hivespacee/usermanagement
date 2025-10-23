@@ -32,8 +32,8 @@ const MOCK_USERS = {
   },
   'clientuser@hrms.com': {
     email: 'clientuser@hrms.com',
-    password: 'admin123',
-    name: 'Client User',
+    password: 'admin123', 
+    name: 'Amaan Ahmed',
     role: 'client-user',
     mfaEnabled: false
   }
@@ -52,9 +52,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    setLoading(true);
-    
-    // Simulate API delay
+
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const userData = MOCK_USERS[email.toLowerCase()];
@@ -66,14 +64,9 @@ export const AuthProvider = ({ children }) => {
         role: userData.role,
         mfaEnabled: userData.mfaEnabled
       };
-      
-      setUser(userInfo);
-      localStorage.setItem('hrms_user', JSON.stringify(userInfo));
-      setLoading(false);
+  
       return { success: true, user: userInfo };
     }
-    
-    setLoading(false);
     return { success: false, error: 'Invalid credentials' };
   };
 
@@ -82,23 +75,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('hrms_user');
   };
 
-  const verifyOTP = async (otp) => {
-    setLoading(true);
+  const verifyOTP = async (otp,userInfo) => {
     
-    // Simulate OTP verification delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock OTP verification - accept any 6-digit code
-    if (otp && otp.length === 6 && /^\d+$/.test(otp)) {
-      setLoading(false);
+
+    if (otp=="999999" && otp.length === 6 && /^\d+$/.test(otp)) {
+      setUser(userInfo);
+      localStorage.setItem('hrms_user', JSON.stringify(userInfo));
       return { success: true };
     }
     
-    setLoading(false);
     return { success: false, error: 'Invalid OTP' };
   };
-
-
 
   const value = {
     user,

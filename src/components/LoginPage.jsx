@@ -12,13 +12,15 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showOtpPopup, setShowOtpPopup] = useState(false);
-
+    const [buttonLoading, setButtonLoading] = useState(false);
+    const [otpbuttonLoading, setOtpButtonLoading] = useState(false);
+    const [pendingUser, setPendingUser] = useState(null);
     const { showToast } = useToast();
     const { login, verifyOTP, loading, user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
+        if (user && !showOtpPopup) {
             const roleRoutes = {
                 'super-admin': '/dashboard/super-admin',
                 'site-admin': '/dashboard/site-admin',
@@ -34,12 +36,8 @@ const LoginPage = () => {
         return <ShimmerLoader />;
     }
 
-    const checkMfaStatus = (email) => {
-        const enabledEmails = ['superadmin@hrms.com', 'siteadmin@hrms.com'];
-        return enabledEmails.includes(email.toLowerCase());
-    };
-
     const handleSubmit = async (e) => {
+        setButtonLoading(true);
         e.preventDefault();
 
         if (password.length < 6) {
@@ -50,20 +48,22 @@ const LoginPage = () => {
         const result = await login(email, password);
 
         if (result.success) {
-            const isMfaEnabled = checkMfaStatus(email);
-
+            setPendingUser(result.user);
             setShowOtpPopup(true);
-        }
+            setButtonLoading(false);
+        }    
         else {
             showToast(result.error || "Wrong email or password", "error");
         }
     };
 
     const handleOtpVerify = async (otp) => {
-        const result = await verifyOTP(otp);
+        setOtpButtonLoading(true);
 
+        const result = await verifyOTP(otp, pendingUser);
         if (result.success) {
             showToast("OTP verified successfully!", "success");
+            setOtpButtonLoading(false);
             setShowOtpPopup(false);
 
             const roleRoutes = {
@@ -82,7 +82,7 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 bg-neutral-800 font-mono tracking-widest">
-            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-4xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
+            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl flex items-center justify-center shadow-lg rounded-lg overflow-hidden bg-stone-500">
                 <div className="w-full p-6 sm:p-8 relative">
                     <div className="absolute top-2 sm:top-4 right-2 sm:right-4 opacity-20">
                         <Notebook className="w-12 sm:w-16 md:w-18 h-8 sm:h-10 md:h-12 mt-2 text-slate transform" />
@@ -139,10 +139,10 @@ const LoginPage = () => {
 
                             <button
                                 type="submit"
-                                disabled={loading}
+                                disabled={buttonLoading}
                                 className="w-full btn-primary py-3 sm:py-4 text-base sm:text-lg scale-100 font-semibold rounded-4xl bg-black text-white hover:bg-gray-950 hover:scale-105 transition duration-300"
                             >
-                                {loading ? 'Verifying...' : 'Send OTP'}
+                                {buttonLoading ? 'Verifying...' : 'Send OTP'}
                             </button>
                         </form>
                     </div>
@@ -152,8 +152,10 @@ const LoginPage = () => {
             {showOtpPopup && (
                 <OtpPopup
                     email={email}
-                    isMfaEnabled={user?.mfaEnabled} onClose={() => setShowOtpPopup(false)}
+                    isMfaEnabled={user?.mfaEnabled} 
+                    onClose={() => setShowOtpPopup(false)}
                     onVerify={handleOtpVerify}
+                    buttonLoading={otpbuttonLoading}
                 />
             )}
         </div>
@@ -161,3 +163,5 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
