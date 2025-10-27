@@ -1,43 +1,9 @@
-import {useState, useEffect} from "react"
-import {AuthContext} from "./AuthContext";
+import { useState, useEffect } from "react"
+import { AuthContext } from "./AuthContext";
+import axios from "axios";
+const VITE_API_BASE_URL = 'http://192.168.68.58:3000';
 
-const MOCK_USERS = {
-  'superadmin@hrms.com': {
-    email: 'superadmin@hrms.com',
-    password: 'admin123',
-    name: 'Super Admin',
-    role: 'super-admin',
-    mfaEnabled: true
-  },
-  'siteadmin@hrms.com': {
-    email: 'siteadmin@hrms.com',
-    password: 'admin123',
-    name: 'Site Admin',
-    role: 'site-admin',
-    mfaEnabled: true
-  },
-  'operator@hrms.com': {
-    email: 'operator@hrms.com',
-    password: 'admin123',
-    name: 'Operator',
-    role: 'operator',
-    mfaEnabled: false
-  },
-  'clientadmin@hrms.com': {
-    email: 'clientadmin@hrms.com',
-    password: 'admin123',
-    name: 'Client Admin',
-    role: 'client-admin',
-    mfaEnabled: false
-  },
-  'clientuser@hrms.com': {
-    email: 'clientuser@hrms.com',
-    password: 'admin123', 
-    name: 'Amaan Ahmed',
-    role: 'client-user',
-    mfaEnabled: false
-  }
-};
+
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -54,20 +20,28 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const userData = MOCK_USERS[email.toLowerCase()];
-    
-    if (userData && userData.password === password) {
-      const userInfo = {
-        email: userData.email,
-        name: userData.name,
-        role: userData.role,
-        mfaEnabled: userData.mfaEnabled
-      };
-  
-      return { success: true, user: userInfo };
+
+    try {
+      const response = await axios.post(`${VITE_API_BASE_URL}/api/user/login`, { email, password });
+      const result = response.data;
+
+      if (response.status === 200) {
+        const userInfo = {
+          email: result.email,
+          role: result.role,
+          totpEnabled: result.validationType  // "otp" or "totp"
+        };
+        return { success: true, user: userInfo };
+      }
+      return { success: false, error: 'Invalid credentials' };
     }
-    return { success: false, error: 'Invalid credentials' };
+    catch (error) {
+      console.error('Login error:', error.message);
+      return {
+        success: false,
+        error: error.response?.data?.error || 'An error occurred during login'
+      }
+    }
   };
 
   const logout = () => {
@@ -75,18 +49,55 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('hrms_user');
   };
 
-  const verifyOTP = async (otp,userInfo) => {
-    
+  const verifyOTP = async (otp, userInfo) => {
+
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (otp=="999999" && otp.length === 6 && /^\d+$/.test(otp)) {
-      setUser(userInfo);
-      localStorage.setItem('hrms_user', JSON.stringify(userInfo));
-      return { success: true };
+    try {
+      if (otp.length === 6 && /^\d+$/.test(otp)) {
+        let response;
+        if (userInfo.totpEnabled === "totp") {
+            response = await axios.post(`${VITE_API_BASE_URL}/api/user/validatetotplogin`, { token: otp, email: userInfo.email });
+        }
+        else {
+          response = await axios.post(`${VITE_API_BASE_URL}/api/user/validateotplogin`, { otp_received: otp, email: userInfo.email });
+        }
+        const result = response.data;
+        const sessionToken = result.token;
+        const payload = {
+          ...userInfo,
+          sessionToken
+        }
+        setUser(userInfo);
+        localStorage.setItem('hrms_user', JSON.stringify(payload));
+        return { success: true, user: payload };
+      }
+      return { success: false, error: 'Invalid OTP format' };
     }
-    
-    return { success: false, error: 'Invalid OTP' };
+
+    catch (error) {
+      console.error('OTP Verification error:', error.message);
+      return {
+        success: false,
+        error: error.response?.data?.error || 'An error occurred during OTP verification'
+      }
+    }
   };
+
+  // const signup = async(firstName, lastName, email, password, confirmPassword) => {
+  //   try{ 
+
+  //   }
+  //   catch(error){
+  //     console.error('Signup error:', error.message);
+  //     return {
+  //       success: false,
+  //       error: error.response?.data?.error || 'An error occurred during signup'
+  //   }
+  // }
+  // }
+
+
 
   const value = {
     user,

@@ -22,12 +22,12 @@ function App() {
           
           {/* Protected Dashboard Routes */}
           <Route path="/dashboard/super-admin" element={
-            <ProtectedRoute requiredRole="super-admin">
+            <ProtectedRoute requiredRole="super_admin">
               <SuperAdminDashboard />
             </ProtectedRoute>
           } />
           <Route path="/dashboard/site-admin" element={
-            <ProtectedRoute requiredRole="site-admin">
+            <ProtectedRoute requiredRole="site_admin">
               <SiteAdminDashboard />
             </ProtectedRoute>
           } />
@@ -37,12 +37,12 @@ function App() {
             </ProtectedRoute>
           } />
           <Route path="/dashboard/client-admin" element={
-            <ProtectedRoute requiredRole="client-admin">
+            <ProtectedRoute requiredRole="client_admin">
               <ClientAdminDashboard />
             </ProtectedRoute>
           } />
           <Route path="/dashboard/client-user" element={
-            <ProtectedRoute requiredRole="client-user">
+            <ProtectedRoute requiredRole="client_user">
               <ClientUserDashboard />
             </ProtectedRoute>
           } />

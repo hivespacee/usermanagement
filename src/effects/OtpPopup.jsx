@@ -4,12 +4,13 @@ import { useToast } from "../context/useToast";
 
 const OtpPopup = ({ email, onClose, onVerify, isMfaEnabled, buttonLoading }) => {
   const [otp, setOtp] = useState("");
+  console.log("MFA Enabled: ", isMfaEnabled);
   const { showToast } = useToast();
 
   const handleOTPSubmit = (e) => {
-
+ 
     e.preventDefault();
-
+ 
     if (otp.length !== 6) {
       showToast("Please enter a valid 6-digit OTP", "error");
       return;

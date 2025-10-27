@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '../context/useToast'
 import { useAuth } from '../context/useAuth'
 import { Notebook, Mail, Lock, Eye, EyeOff, KeyRound, X } from 'lucide-react';
@@ -22,13 +22,15 @@ const LoginPage = () => {
     useEffect(() => {
         if (user && !showOtpPopup) {
             const roleRoutes = {
-                'super-admin': '/dashboard/super-admin',
-                'site-admin': '/dashboard/site-admin',
+                'super_admin': '/dashboard/super-admin',
+                'site_admin': '/dashboard/site-admin',
                 'operator': '/dashboard/operator',
-                'client-admin': '/dashboard/client-admin',
-                'client-user': '/dashboard/client-user'
+                'client_admin': '/dashboard/client-admin',
+                'client_user': '/dashboard/client-user'
             };
-            navigate(roleRoutes[user.role] || '/dashboard/super-admin', { replace: true });
+            const normalizedRole = user.role?.toLowerCase().replace(/-/g, '_');
+            console.log("Normalized Role: ", normalizedRole);
+            navigate(roleRoutes[normalizedRole] || '/dashboard/operator', { replace: true });
         }
     }, [user, navigate]);
 
@@ -42,19 +44,21 @@ const LoginPage = () => {
 
         if (password.length < 6) {
             showToast('Password must be at least 6 characters long', 'error');
+            setButtonLoading(false);
             return;
         }
-
         const result = await login(email, password);
-
+        console.log(result.user);
         if (result.success) {
             setPendingUser(result.user);
             setShowOtpPopup(true);
             setButtonLoading(false);
-        }    
+        }
         else {
             showToast(result.error || "Wrong email or password", "error");
+            setButtonLoading(false);
         }
+        setButtonLoading(false);
     };
 
     const handleOtpVerify = async (otp) => {
@@ -67,16 +71,20 @@ const LoginPage = () => {
             setShowOtpPopup(false);
 
             const roleRoutes = {
-                'super-admin': '/dashboard/super-admin',
-                'site-admin': '/dashboard/site-admin',
+                'super_admin': '/dashboard/super-admin',
+                'site_admin': '/dashboard/site-admin',
                 'operator': '/dashboard/operator',
-                'client-admin': '/dashboard/client-admin',
-                'client-user': '/dashboard/client-user'
+                'client_admin': '/dashboard/client-admin',
+                'client_user': '/dashboard/client-user'
             };
-
-            navigate(roleRoutes[user?.role] || '/dashboard/super-admin', { replace: true });
+            // console.log(pendingUser);
+            // start from pendinguser role and try checking the routes according to it 
+            const presentRole = pendingUser.role?.toLowerCase().replace(/-/g, '_');
+            console.log("Present Role: ", presentRole);
+            navigate(roleRoutes[presentRole] || '/dashboard/operator', { replace: true });
         } else {
             showToast(result.error || 'Invalid OTP', 'error');
+            setOtpButtonLoading(false);
         }
     };
 
@@ -152,7 +160,7 @@ const LoginPage = () => {
             {showOtpPopup && (
                 <OtpPopup
                     email={email}
-                    isMfaEnabled={user?.mfaEnabled} 
+                    isMfaEnabled={pendingUser?.totpEnabled==="totp"}
                     onClose={() => setShowOtpPopup(false)}
                     onVerify={handleOtpVerify}
                     buttonLoading={otpbuttonLoading}

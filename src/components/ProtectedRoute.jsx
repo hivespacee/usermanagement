@@ -16,14 +16,14 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
 
   if (requiredRole && user.role !== requiredRole){
     const roleRoutes = {
-      'super-admin': '/dashboard/super-admin',
-      'site-admin': '/dashboard/site-admin',
+      'super_admin': '/dashboard/super-admin',
+      'site_admin': '/dashboard/site-admin',
       'operator': '/dashboard/operator',
-      'client-admin': '/dashboard/client-admin',
-      'client-user': '/dashboard/client-user'
+      'client_admin': '/dashboard/client-admin',
+      'client_user': '/dashboard/client-user'
     };
     
-    return <Navigate to={roleRoutes[user.role] || '/dashboard/super-admin'} replace />;
+    return <Navigate to={roleRoutes[user.role] || '/dashboard/operator'} replace />;
   }
 
   return children;
